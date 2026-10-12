@@ -48,11 +48,11 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pip install -r requirements-dev.txt
+          pip install --only-binary :all: -r requirements-dev.txt
           pytest --cov=temperature --cov-report=xml
 
       - name: SonarQube Cloud scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
