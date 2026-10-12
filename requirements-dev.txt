@@ -1,1 +1,2 @@
-pytest -v --cov=temperature --cov-report=xml
+pytest
+pytest-cov
