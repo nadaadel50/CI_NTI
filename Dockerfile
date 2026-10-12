@@ -1,5 +1,7 @@
 FROM python:3.13-slim
 
+RUN pip uninstall -y setuptools wheel msgpack urllib3 pip
+
 WORKDIR /app
 
 RUN useradd --create-home appuser
