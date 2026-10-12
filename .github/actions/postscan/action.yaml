@@ -1,0 +1,31 @@
+name: Post-scan
+description: Scan a built container image by reference with Trivy
+
+inputs:
+  image-ref:
+    description: Full image reference, e.g. ghcr.io/user/repo:sha
+    required: true
+  registry-username:
+    description: Registry username (needed for private images)
+    required: true
+  registry-password:
+    description: Registry password or token (needed for private images)
+    required: true
+  severity:
+    description: Trivy severities that fail the scan
+    default: "HIGH,CRITICAL"
+
+runs:
+  using: composite
+  steps:
+    - name: Trivy image scan
+      uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+      env:
+        TRIVY_USERNAME: ${{ inputs.registry-username }}
+        TRIVY_PASSWORD: ${{ inputs.registry-password }}
+      with:
+        image-ref: ${{ inputs.image-ref }}
+        severity: ${{ inputs.severity }}
+        ignore-unfixed: true
+        exit-code: "1"
+        format: table

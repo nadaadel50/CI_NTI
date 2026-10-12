@@ -1,0 +1,38 @@
+name: Pre-scan
+description: Scan source code with Gitleaks, TruffleHog and Trivy
+
+inputs:
+  github-token:
+    description: Token for gitleaks-action
+    required: true
+  scan-path:
+    description: Path for the Trivy filesystem scan
+    default: "."
+  severity:
+    description: Trivy severities that fail the scan
+    default: "HIGH,CRITICAL"
+
+runs:
+  using: composite
+  steps:
+    - name: Gitleaks
+      uses: gitleaks/gitleaks-action@v3      
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: TruffleHog
+      if: ${{ !cancelled() }}
+      uses: trufflesecurity/trufflehog@v3.95.8 
+      with:
+        extra_args: --results=verified,unknown
+
+    - name: Trivy filesystem scan
+      if: ${{ !cancelled() }}
+      uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
+      with:
+        scan-type: fs
+        scan-ref: ${{ inputs.scan-path }}
+        scanners: vuln,secret,misconfig
+        severity: ${{ inputs.severity }}
+        ignore-unfixed: true
+        exit-code: "1"
