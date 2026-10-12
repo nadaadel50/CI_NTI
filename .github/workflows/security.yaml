@@ -48,7 +48,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pip install --only-binary :all: -r requirements-dev.txt
+          pip install --only-binary :all: pytest==9.1.1 pytest-cov==7.1.0
           pytest --cov=temperature --cov-report=xml
 
       - name: SonarQube Cloud scan
