@@ -168,7 +168,3 @@ CI pipelines run third-party code with access to tokens and secrets, so the proj
 | Manual run | Run `ci.yml` with Python 3.12 and `create-package` off | `package` and `verify` skipped, version shows `n/a` |
 
 > Never use a real credential when testing the secret scanners.
-
-## Author
-
-Nada Adel, [@nadaadel50](https://github.com/nadaadel50)
